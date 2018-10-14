@@ -1,0 +1,63 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+repositories {
+    jcenter()
+}
+
+group = 'io.crate'
+archivesBaseName = 'kafka-flink-crate'
+version = 0.1
+
+ext {
+    flinkVersion = '1.6.2'
+    flinkJacksonVersion = '2.7.4'
+    crateJDBCVersion = '2.4.0'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+configurations {
+    // exclude following dependencies from our shadowJar
+    runtime.exclude module: 'flink-java'
+    runtime.exclude module: 'flink-streaming-java_2.11'
+    runtime.exclude module: 'flink-clients_2.11'
+}
+
+dependencies {
+    // flink
+    compile "org.apache.flink:flink-java:${flinkVersion}"
+    compile "org.apache.flink:flink-streaming-java_2.11:${flinkVersion}"
+    compile "org.apache.flink:flink-jdbc:${flinkVersion}"
+
+    // crate
+    compile "io.crate:crate-jdbc:${crateJDBCVersion}"
+
+    // kafka
+    compile "org.apache.flink:flink-connector-kafka-0.10_2.11:${flinkVersion}"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${flinkJacksonVersion}"
+}
+
+shadowJar {
+    classifier = null
+    manifest {
+        attributes 'Main-Class': 'io.crate.streaming.TaxiRidesStreamingJob'
+    }
+}
+
+assemble.dependsOn(shadowJar)
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.10.2'
+}
