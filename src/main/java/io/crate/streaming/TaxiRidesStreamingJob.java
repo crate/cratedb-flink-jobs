@@ -3,11 +3,11 @@ package io.crate.streaming;
 import io.crate.streaming.model.TaxiRide;
 import io.crate.streaming.model.TaxiRideDeserializationSchema;
 import org.apache.flink.api.common.io.OutputFormat;
-import org.apache.flink.api.java.io.jdbc.JDBCOutputFormat;
+import org.apache.flink.connector.jdbc.JdbcOutputFormat;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer010;
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.types.Row;
 
 import java.util.Properties;
@@ -43,7 +43,7 @@ public class TaxiRidesStreamingJob {
                 parameters.get("kafka.offset", "earliest")
         );
 
-        return new FlinkKafkaConsumer010<>(
+        return new FlinkKafkaConsumer<>(
                 parameters.getRequired("kafka.topic"),
                 TaxiRideDeserializationSchema.INSTANCE,
                 properties
@@ -51,9 +51,15 @@ public class TaxiRidesStreamingJob {
     }
 
     private static OutputFormat<Row> createJDBCOutputFormat(ParameterTool parameters) {
-        return JDBCOutputFormat.buildJDBCOutputFormat()
+        /*
+         * TODO: Add compatibility for PostgreSQL JDBC.
+         *       Currently, it raises `org.postgresql.util.PSQLException: No hstore extension installed.`.
+         *       .setDrivername("org.postgresql.Driver")
+         *       .setDBUrl(String.format("jdbc:postgresql://%s/", parameters.getRequired("crate.hosts")))
+         */
+        return JdbcOutputFormat.buildJdbcOutputFormat()
                 .setDrivername("io.crate.client.jdbc.CrateDriver")
-                .setBatchInterval(parameters.getInt("batch.interval.ms", 5000))
+                .setBatchSize(parameters.getInt("batch.size", 5000))
                 .setDBUrl(String.format("crate://%s/", parameters.getRequired("crate.hosts")))
                 .setUsername(parameters.get("crate.user", "crate"))
                 .setPassword(parameters.get("crate.password", ""))
