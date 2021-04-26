@@ -13,6 +13,14 @@ Build Flink Job
 
     $ ./gradlew build
 
+Submit Flink Job
+================
+
+.. code:: console
+
+    make run
+
+
 Flink Job Configurations
 ========================
 
