@@ -20,33 +20,43 @@ archivesBaseName = 'cratedb-flink-jobs'
 version = 0.2
 
 ext {
-    flinkVersion = '1.6.2'
-    flinkJacksonVersion = '2.7.4'
-    crateJDBCVersion = '2.4.0'
+    scalaVersion = '2.12'
+    flinkVersion = '1.12.2'
+    jacksonVersion = '2.12.3'
+    crateJDBCVersion = '2.6.0'
+    postgresJDBCVersion = '42.2.20'
 }
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 configurations {
-    // exclude following dependencies from our shadowJar
-    runtime.exclude module: 'flink-java'
-    runtime.exclude module: 'flink-streaming-java_2.11'
-    runtime.exclude module: 'flink-clients_2.11'
+    // Exclude following dependencies from our shadowJar
+    runtime.exclude module: "flink-java"
+    runtime.exclude module: "flink-streaming-java_${scalaVersion}"
+    runtime.exclude module: "flink-clients_${scalaVersion}"
 }
 
 dependencies {
-    // flink
+    // Flink
+    // https://mvnrepository.com/artifact/org.apache.flink
     compile "org.apache.flink:flink-java:${flinkVersion}"
-    compile "org.apache.flink:flink-streaming-java_2.11:${flinkVersion}"
-    compile "org.apache.flink:flink-jdbc:${flinkVersion}"
+    compile "org.apache.flink:flink-streaming-java_${scalaVersion}:${flinkVersion}"
+    compile "org.apache.flink:flink-connector-jdbc_${scalaVersion}:${flinkVersion}"
 
-    // crate
+    // Kafka
+    // https://mvnrepository.com/artifact/org.apache.flink
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype
+    compile "org.apache.flink:flink-connector-kafka_${scalaVersion}:${flinkVersion}"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
+
+    // CrateDB
+    // https://mvnrepository.com/artifact/io.crate
+    // https://mvnrepository.com/artifact/org.postgresql
     compile "io.crate:crate-jdbc:${crateJDBCVersion}"
+    // TODO: Currently raises `org.postgresql.util.PSQLException: No hstore extension installed.`.
+    //       compile "org.postgresql:postgresql:${postgresJDBCVersion}"
 
-    // kafka
-    compile "org.apache.flink:flink-connector-kafka-0.10_2.11:${flinkVersion}"
-    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${flinkJacksonVersion}"
 }
 
 shadowJar {
