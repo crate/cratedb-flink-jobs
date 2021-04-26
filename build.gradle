@@ -16,8 +16,8 @@ repositories {
 }
 
 group = 'io.crate'
-archivesBaseName = 'kafka-flink-crate'
-version = 0.1
+archivesBaseName = 'cratedb-flink-jobs'
+version = 0.2
 
 ext {
     flinkVersion = '1.6.2'
