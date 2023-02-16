@@ -2,9 +2,17 @@
 Kafka, Flink, CrateDB: How-To Guide
 ===================================
 
+
+About
+=====
+
+This repository accompanies the article `Build a data ingestion pipeline using
+Kafka, Flink, and CrateDB`_.
+
 The sample `Apache Flink`_ job that uses `Apache Kafka`_ as a source and
 `CrateDB`_ as sink. The data stream is represented by records that contain
 information about `NYC Yellow Taxi Trips`_.
+
 
 Build Flink Job
 ===============
@@ -79,5 +87,6 @@ These settings for the sample Flink job.
 
 .. _Apache Flink: https://flink.apache.org/
 .. _Apache Kafka: https://kafka.apache.org/
+.. _Build a data ingestion pipeline using Kafka, Flink, and CrateDB: https://dev.to/crate/build-a-data-ingestion-pipeline-using-kafka-flink-and-cratedb-1h5o
 .. _CrateDB: https://crate.io/
 .. _NYC Yellow Taxi Trips: https://data.cityofnewyork.us/Transportation/2017-Yellow-Taxi-Trip-Data/biws-g3hs/
