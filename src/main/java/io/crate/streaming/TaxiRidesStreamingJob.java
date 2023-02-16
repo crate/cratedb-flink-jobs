@@ -25,6 +25,7 @@ public class TaxiRidesStreamingJob {
         env
                 .addSource(createStreamSource(parameters))
                 .map(new TaxiRideToRowMapFunction())
+                // TODO: Migrate to `JdbcSink`, see https://ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/jdbc.html
                 .writeUsingOutputFormat(createJDBCOutputFormat(parameters));
 
         env.execute();
