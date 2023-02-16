@@ -31,7 +31,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 configurations {
-    // Exclude following dependencies from our shadowJar
+    // Exclude following dependencies from the shadowJar
     runtime.exclude module: "flink-java"
     runtime.exclude module: "flink-streaming-java_${scalaVersion}"
     runtime.exclude module: "flink-clients_${scalaVersion}"
