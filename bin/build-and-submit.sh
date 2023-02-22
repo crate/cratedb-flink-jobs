@@ -3,7 +3,7 @@
 
 # Version of the jar file.
 # TODO: Extract from `build.gradle`.
-VERSION="0.2"
+VERSION=$(./gradlew printVersion | head -1)
 JARFILE="cratedb-flink-jobs-${VERSION}.jar"
 
 # Build job
@@ -12,7 +12,7 @@ JARFILE="cratedb-flink-jobs-${VERSION}.jar"
 # Upload and invoke job
 docker run -it \
   --network=scada-demo \
-  --volume=$(pwd)/build/libs/${JARFILE}:/${JARFILE} flink:1.12 \
+  --volume=$(pwd)/build/libs/${JARFILE}:/${JARFILE} flink:1.16.1 \
     \
     flink run --jobmanager=flink-jobmanager:8081 /${JARFILE} \
       --kafka.servers kafka-broker:9092 \
