@@ -27,20 +27,20 @@ public class TaxiRidesStreamingJob {
                 .map(new TaxiRideToRowStringFunction())
                 .addSink(
                     JdbcSink.sink(
-                        String.format("INSERT INTO doc.%s (payload) VALUES (?)", parameters.getRequired("crate.table")),
-                        (statement, row) -> statement.setString(1, (String) row.getField(0)),
-                        JdbcExecutionOptions.builder()
-                                .withBatchSize(1000)
-                                .withBatchIntervalMs(200)
-                                .withMaxRetries(5)
-                                .build(),
-                        new JdbcConnectionOptions.JdbcConnectionOptionsBuilder()
-                                .withUrl(String.format("jdbc:postgresql://%s/", parameters.getRequired("crate.hosts")))
-                                .withDriverName("org.postgresql.Driver")
-                                .withUsername(parameters.get("crate.user", "crate"))
-                                .withPassword(parameters.get("crate.password", ""))
-                                .build()
-                ));
+                            String.format("INSERT INTO doc.%s (payload) VALUES (?)", parameters.getRequired("crate.table")),
+                            (statement, row) -> statement.setString(1, (String) row.getField(0)),
+                            JdbcExecutionOptions.builder()
+                                    .withBatchSize(1000)
+                                    .withBatchIntervalMs(200)
+                                    .withMaxRetries(5)
+                                    .build(),
+                            new JdbcConnectionOptions.JdbcConnectionOptionsBuilder()
+                                    .withUrl(String.format("jdbc:postgresql://%s/", parameters.getRequired("crate.hosts")))
+                                    .withDriverName("org.postgresql.Driver")
+                                    .withUsername(parameters.get("crate.user", "crate"))
+                                    .withPassword(parameters.get("crate.password", ""))
+                                    .build()
+                    ));
 
         env.execute();
     }

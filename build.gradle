@@ -7,6 +7,7 @@ plugins {
 
 repositories {
     mavenCentral()
+    maven { url "https://jitpack.io" }
 }
 
 group = 'io.crate'
@@ -21,6 +22,7 @@ ext {
     flinkVersion = '1.16.1'
     jacksonVersion = '2.14.2'
     postgresJDBCVersion = '42.6.0'
+    crateJDBCVersion = '2.6.0'
     slf4jVersion = '2.0.7'
     log4jVersion = '2.20.0'
 }
@@ -50,7 +52,8 @@ dependencies {
     flinkShadowJar "org.apache.flink:flink-clients:${flinkVersion}"
     flinkShadowJar "org.apache.flink:flink-table-api-java:${flinkVersion}"
     flinkShadowJar "org.apache.flink:flink-table-api-java-bridge:${flinkVersion}"
-    flinkShadowJar "org.apache.flink:flink-connector-jdbc:${flinkVersion}"
+    // Use jitpack.io and Open PR: https://github.com/apache/flink-connector-jdbc/pull/29
+    flinkShadowJar "com.github.apache:flink-connector-jdbc:PR29-SNAPSHOT"
 
     // Kafka
     // https://mvnrepository.com/artifact/org.apache.flink
@@ -59,8 +62,9 @@ dependencies {
     flinkShadowJar "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
 
     // PostgreSQL
-    // https://mvnrepository.com/artifact/org.postgresql
     flinkShadowJar "org.postgresql:postgresql:${postgresJDBCVersion}"
+    // CrateDB - for the Simple*Job to be run inside IDE
+    implementation "io.crate:crate-jdbc:${crateJDBCVersion}"
 
     runtimeOnly "org.apache.flink:flink-runtime:${flinkVersion}"
     runtimeOnly "org.apache.flink:flink-table-runtime:${flinkVersion}"
@@ -97,6 +101,33 @@ jar {
 shadowJar {
     configurations = [project.configurations.flinkShadowJar]
     archiveFileName = 'cratedb-flink-jobs-' + project.version + '.jar'
+}
+
+
+application {
+    mainClassName = "io.crate.streaming.TaxiRidesStreamingJob"
+    applicationDefaultJvmArgs = ["-Dlog4j.configurationFile=log4j2.properties"]
+}
+
+// make compileOnly dependencies available for tests:
+sourceSets {
+    main.compileClasspath += configurations.flinkShadowJar
+    main.runtimeClasspath += configurations.flinkShadowJar
+    test.compileClasspath += configurations.flinkShadowJar
+    test.runtimeClasspath += configurations.flinkShadowJar
+    javadoc.classpath += configurations.flinkShadowJar
+}
+run.classpath = sourceSets.main.runtimeClasspath
+
+jar {
+    manifest {
+        attributes 'Built-By': System.getProperty('user.name'),
+                   'Build-Jdk': System.getProperty('java.version')
+    }
+}
+
+shadowJar {
+    configurations = [project.configurations.flinkShadowJar]
 }
 
 assemble.dependsOn(shadowJar)

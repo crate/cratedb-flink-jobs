@@ -1,5 +1,8 @@
 # IDE files
 .idea
+*.ipr
+*.iws
+*.iml
 
 # Build artifacts
 .gradle
