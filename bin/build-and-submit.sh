@@ -3,7 +3,7 @@
 
 # Version of the jar file.
 # TODO: Extract from `build.gradle`.
-VERSION=$(./gradlew printVersion | head -1)
+VERSION=$(./gradlew printVersion | grep "ProjectVersion:" |awk '{print $2}')
 JARFILE="cratedb-flink-jobs-${VERSION}.jar"
 
 # Build job

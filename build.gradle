@@ -14,7 +14,7 @@ archivesBaseName = 'cratedb-flink-jobs'
 version = 0.3
 
 tasks.register("printVersion") {
-    println project.version
+    println "ProjectVersion: " + project.version
 }
 
 ext {
