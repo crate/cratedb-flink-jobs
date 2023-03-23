@@ -2,12 +2,11 @@
 # Build job and submit to Flink
 
 # Version of the jar file.
-# TODO: Extract from `build.gradle`.
 VERSION=$(./gradlew printVersion | grep "ProjectVersion:" |awk '{print $2}')
 JARFILE="cratedb-flink-jobs-${VERSION}.jar"
 
 # Build job
-./gradlew build
+./gradlew shadowJar
 
 # Upload and invoke job
 docker run -it \
