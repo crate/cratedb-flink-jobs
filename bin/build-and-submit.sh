@@ -6,7 +6,7 @@ VERSION=$(./gradlew printVersion | grep "ProjectVersion:" |awk '{print $2}')
 JARFILE="cratedb-flink-jobs-${VERSION}.jar"
 
 # Build job
-./gradlew shadowJar
+./gradlew build
 
 # Upload and invoke job
 docker run -it \

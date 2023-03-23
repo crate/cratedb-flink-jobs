@@ -1,21 +1,15 @@
 #!/bin/bash
 # Print job information.
 
-# Initialize Gradle and print version.
+# Print Gradle and environment versions.
 ./gradlew --version
 
-# Run all checks.
-# Note: This will also initialize the Gradle daemon, which is important,
-# because, otherwise, the next `printVersion` command will splatter the
-# stdout with corresponding messages.
-./gradlew check
-
 # Version of the jar file.
-VERSION=$(./gradlew printVersion | head -1)
+VERSION=$(./gradlew printVersion | grep "ProjectVersion:" |awk '{print $2}')
 JARFILE="cratedb-flink-jobs-${VERSION}.jar"
 
 # Build JAR file.
-./gradlew shadowJar
+./gradlew build
 
 # Print job information.
 docker run --rm \
