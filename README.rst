@@ -7,11 +7,24 @@ About
 =====
 
 This repository accompanies the article `Build a data ingestion pipeline using
-Kafka, Flink, and CrateDB`_.
+Kafka, Flink, and CrateDB`_ and the `CrateDB Community Day #2`_.
 
-The sample `Apache Flink`_ job that uses `Apache Kafka`_ as a source and
-`CrateDB`_ as sink. The data stream is represented by records that contain
-information about `NYC Yellow Taxi Trips`_.
+The sample `Apache Flink`_ job uses `Apache Kafka`_ as a source and `CrateDB`_
+as a sink. The data stream is represented by records that contain data from the
+venerable `NYC Yellow Taxi Trips`_ dataset.
+
+
+Details
+=======
+
+The high-level article `Build a data ingestion pipeline using Kafka, Flink, and
+CrateDB`_ is accompanied by a corresponding executable infrastructure tutorial
+at `Apache Kafka, Apache Flink, and CrateDB`_, which pulls an Apache Flink job
+JAR file from the assets on the `release page`_ of this repository.
+
+It uses the `Apache Flink JDBC Connector`_, and currently bundles the patch
+submitted at `Apache Flink JDBC Connector » CrateDB support`_.
+
 
 
 Build Flink Job
@@ -85,8 +98,14 @@ These settings for the sample Flink job.
 
   The CrateDB table.
 
+
 .. _Apache Flink: https://flink.apache.org/
+.. _Apache Flink JDBC Connector: https://github.com/apache/flink-connector-jdbc
+.. _Apache Flink JDBC Connector » CrateDB support: https://github.com/apache/flink-connector-jdbc/pull/29
 .. _Apache Kafka: https://kafka.apache.org/
+.. _Apache Kafka, Apache Flink, and CrateDB: https://github.com/crate/cratedb-examples/tree/main/stacks/kafka-flink
 .. _Build a data ingestion pipeline using Kafka, Flink, and CrateDB: https://dev.to/crate/build-a-data-ingestion-pipeline-using-kafka-flink-and-cratedb-1h5o
 .. _CrateDB: https://crate.io/
+.. _CrateDB Community Day #2: https://community.crate.io/t/cratedb-community-day-2/1415
 .. _NYC Yellow Taxi Trips: https://data.cityofnewyork.us/Transportation/2017-Yellow-Taxi-Trip-Data/biws-g3hs/
+.. _release page: https://github.com/crate/cratedb-flink-jobs/releases
