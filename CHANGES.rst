@@ -7,6 +7,11 @@ in progress
 ===========
 
 
+2023-04-23 0.3
+==============
+- Modernize to use Flink 1.16
+
+
 2021-04-27 0.2
 ==============
 - Update to most recent software versions
