@@ -2,13 +2,13 @@ package io.crate.streaming;
 
 import io.crate.streaming.model.TaxiRide;
 import io.crate.streaming.model.TaxiRideDeserializationSchema;
-import org.apache.flink.api.common.io.OutputFormat;
-import org.apache.flink.connector.jdbc.JdbcOutputFormat;
 import org.apache.flink.api.java.utils.ParameterTool;
+import org.apache.flink.connector.jdbc.JdbcConnectionOptions;
+import org.apache.flink.connector.jdbc.JdbcExecutionOptions;
+import org.apache.flink.connector.jdbc.JdbcSink;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
-import org.apache.flink.types.Row;
 
 import java.util.Properties;
 
@@ -24,9 +24,23 @@ public class TaxiRidesStreamingJob {
 
         env
                 .addSource(createStreamSource(parameters))
-                .map(new TaxiRideToRowMapFunction())
-                // TODO: Migrate to `JdbcSink`, see https://ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/jdbc.html
-                .writeUsingOutputFormat(createJDBCOutputFormat(parameters));
+                .map(new TaxiRideToRowStringFunction())
+                .addSink(
+                    JdbcSink.sink(
+                        String.format("INSERT INTO doc.%s (payload) VALUES (?)", parameters.getRequired("crate.table")),
+                        (statement, row) -> statement.setString(1, (String) row.getField(0)),
+                        JdbcExecutionOptions.builder()
+                                .withBatchSize(1000)
+                                .withBatchIntervalMs(200)
+                                .withMaxRetries(5)
+                                .build(),
+                        new JdbcConnectionOptions.JdbcConnectionOptionsBuilder()
+                                .withUrl(String.format("jdbc:postgresql://%s/", parameters.getRequired("crate.hosts")))
+                                .withDriverName("org.postgresql.Driver")
+                                .withUsername(parameters.get("crate.user", "crate"))
+                                .withPassword(parameters.get("crate.password", ""))
+                                .build()
+                ));
 
         env.execute();
     }
@@ -49,25 +63,5 @@ public class TaxiRidesStreamingJob {
                 TaxiRideDeserializationSchema.INSTANCE,
                 properties
         );
-    }
-
-    private static OutputFormat<Row> createJDBCOutputFormat(ParameterTool parameters) {
-        /*
-         * TODO: Add compatibility for PostgreSQL JDBC.
-         *       Currently, it raises `org.postgresql.util.PSQLException: No hstore extension installed.`.
-         *       .setDrivername("org.postgresql.Driver")
-         *       .setDBUrl(String.format("jdbc:postgresql://%s/", parameters.getRequired("crate.hosts")))
-         */
-        return JdbcOutputFormat.buildJdbcOutputFormat()
-                .setDrivername("io.crate.client.jdbc.CrateDriver")
-                .setBatchSize(parameters.getInt("batch.size", 5000))
-                .setDBUrl(String.format("crate://%s/", parameters.getRequired("crate.hosts")))
-                .setUsername(parameters.get("crate.user", "crate"))
-                .setPassword(parameters.get("crate.password", ""))
-                .setQuery(String.format(
-                        "INSERT INTO %s (payload) VALUES (?)",
-                        parameters.getRequired("crate.table"))
-                )
-                .finish();
     }
 }

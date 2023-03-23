@@ -1,73 +1,102 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
-    }
+plugins {
+    id "com.github.johnrengelman.shadow" version "7.1.2"
+    id "java"
+    id "idea"
+    id "application"
 }
 
-apply plugin: 'java'
-apply plugin: 'idea'
-apply plugin: 'com.github.johnrengelman.shadow'
-
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 group = 'io.crate'
 archivesBaseName = 'cratedb-flink-jobs'
-version = 0.2
+version = 0.3
 
-ext {
-    scalaVersion = '2.12'
-    flinkVersion = '1.12.2'
-    jacksonVersion = '2.12.3'
-    crateJDBCVersion = '2.6.0'
-    postgresJDBCVersion = '42.2.20'
+tasks.register("printVersion") {
+    println project.version
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+ext {
+    flinkVersion = '1.16.1'
+    jacksonVersion = '2.12.3'
+    postgresJDBCVersion = '42.6.0'
+    slf4jVersion = '2.0.7'
+    log4jVersion = '2.20.0'
+}
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
+}
+
+// NOTE: We cannot use "compileOnly" or "shadow" configurations since then we could not run code
+// in the IDE or with "gradle run". We also cannot exclude transitive dependencies from the
+// shadowJar yet (see https://github.com/johnrengelman/shadow/issues/159).
+// -> Explicitly define the // libraries we want to be included in the "flinkShadowJar" configuration!
 configurations {
-    // Exclude following dependencies from the shadowJar
-    runtime.exclude module: "flink-java"
-    runtime.exclude module: "flink-streaming-java_${scalaVersion}"
-    runtime.exclude module: "flink-clients_${scalaVersion}"
+    flinkShadowJar // dependencies which go into the shadowJar
+    // always exclude these (also from transitive dependencies) since they are provided by Flink
+    flinkShadowJar.exclude group: 'org.apache.flink', module: 'force-shading'
+    flinkShadowJar.exclude group: 'com.google.code.findbugs', module: 'jsr305'
+    flinkShadowJar.exclude group: 'org.slf4j'
+    flinkShadowJar.exclude group: 'org.apache.logging.log4j'
 }
 
 dependencies {
     // Flink
     // https://mvnrepository.com/artifact/org.apache.flink
-    compile "org.apache.flink:flink-java:${flinkVersion}"
-    compile "org.apache.flink:flink-streaming-java_${scalaVersion}:${flinkVersion}"
-    compile "org.apache.flink:flink-connector-jdbc_${scalaVersion}:${flinkVersion}"
+    flinkShadowJar "org.apache.flink:flink-clients:${flinkVersion}"
+    flinkShadowJar "org.apache.flink:flink-table-api-java:${flinkVersion}"
+    flinkShadowJar "org.apache.flink:flink-table-api-java-bridge:${flinkVersion}"
+    flinkShadowJar "org.apache.flink:flink-connector-jdbc:${flinkVersion}"
 
     // Kafka
     // https://mvnrepository.com/artifact/org.apache.flink
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype
-    compile "org.apache.flink:flink-connector-kafka_${scalaVersion}:${flinkVersion}"
-    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
+    flinkShadowJar "org.apache.flink:flink-connector-kafka:${flinkVersion}"
+    flinkShadowJar "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
 
-    // CrateDB
-    // https://mvnrepository.com/artifact/io.crate
+    // PostgreSQL
     // https://mvnrepository.com/artifact/org.postgresql
-    compile "io.crate:crate-jdbc:${crateJDBCVersion}"
-    // TODO: Currently raises `org.postgresql.util.PSQLException: No hstore extension installed.`.
-    //       compile "org.postgresql:postgresql:${postgresJDBCVersion}"
+    flinkShadowJar "org.postgresql:postgresql:${postgresJDBCVersion}"
 
+    runtimeOnly "org.apache.flink:flink-runtime:${flinkVersion}"
+    runtimeOnly "org.apache.flink:flink-table-runtime:${flinkVersion}"
+    runtimeOnly "org.apache.flink:flink-table-planner-loader:${flinkVersion}"
+    runtimeOnly "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
+    runtimeOnly "org.apache.logging.log4j:log4j-api:${log4jVersion}"
+    runtimeOnly "org.apache.logging.log4j:log4j-core:${log4jVersion}"
+}
+
+application {
+    mainClassName = "io.crate.streaming.TaxiRidesStreamingJob"
+    applicationDefaultJvmArgs = ["-Dlog4j.configurationFile=log4j2.properties"]
+}
+
+// make compileOnly dependencies available for tests:
+sourceSets {
+    main.compileClasspath += configurations.flinkShadowJar
+    main.runtimeClasspath += configurations.flinkShadowJar
+    test.compileClasspath += configurations.flinkShadowJar
+    test.runtimeClasspath += configurations.flinkShadowJar
+    javadoc.classpath += configurations.flinkShadowJar
+}
+run.classpath = sourceSets.main.runtimeClasspath
+
+jar {
+    manifest {
+        attributes 'Built-By': System.getProperty('user.name'),
+                   'Build-Jdk': System.getProperty('java.version'),
+                   'Main-Class': 'io.crate.streaming.TaxiRidesStreamingJob'
+    }
+    archiveFileName = 'cratedb-flink-jobs-' + project.version + '-thin.jar'
 }
 
 shadowJar {
-    classifier = null
-    manifest {
-        attributes 'Main-Class': 'io.crate.streaming.TaxiRidesStreamingJob'
-    }
+    configurations = [project.configurations.flinkShadowJar]
+    archiveFileName = 'cratedb-flink-jobs-' + project.version + '.jar'
 }
 
 assemble.dependsOn(shadowJar)
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.10.2'
-}

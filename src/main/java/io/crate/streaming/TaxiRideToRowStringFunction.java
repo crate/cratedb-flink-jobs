@@ -1,19 +1,16 @@
 package io.crate.streaming;
 
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import io.crate.streaming.model.TaxiRide;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.configuration.Configuration;
+import org.apache.flink.table.api.DataTypes;
 import org.apache.flink.types.Row;
 
-import java.util.HashMap;
-import java.util.Map;
+public class TaxiRideToRowStringFunction extends RichMapFunction<TaxiRide, Row> {
 
-public class TaxiRideToRowMapFunction extends RichMapFunction<TaxiRide, Row> {
-
-    private volatile TypeReference<HashMap<String, Object>> typeRef;
     private volatile ObjectMapper mapper;
 
     @Override
@@ -21,13 +18,11 @@ public class TaxiRideToRowMapFunction extends RichMapFunction<TaxiRide, Row> {
         super.open(parameters);
         mapper = new ObjectMapper();
         mapper.setDateFormat(new ISO8601DateFormat());
-
-        typeRef = new TypeReference<HashMap<String, Object>>() {};
     }
 
     @Override
-    public Row map(TaxiRide taxiRide) {
-        Map<String, Object> taxiRideObjectAsMap = mapper.convertValue(taxiRide, typeRef);
-        return Row.of(taxiRideObjectAsMap);
+    public Row map(TaxiRide taxiRide) throws JsonProcessingException {
+        String taxiRideObjectAsMap = mapper.writeValueAsString(taxiRide);
+        return Row.of(taxiRideObjectAsMap, DataTypes.STRING());
     }
 }
