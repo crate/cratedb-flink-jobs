@@ -13,10 +13,10 @@ This repository accompanies the article `Build a data ingestion pipeline using
 Kafka, Flink, and CrateDB`_ and material presented at the `CrateDB Community
 Day #2`_.
 
-It is accompanied by a corresponding `executable infrastructure tutorial for
+It is supplemented by a corresponding `executable end-to-end tutorial for
 Apache Kafka, Apache Flink, and CrateDB`_, which makes it easy to run a
 Kafka/Flink infrastructure on your workstation, pulls the Flink job JAR file
-from the assets on the `release page`_ and submits it to the Flink job manager.
+from the assets on the `release page`_ and submits it to the Flink cluster.
 
 For learning more details about the technologies used here, please follow up
 reading the excellent documentation and resources around Apache Flink.
@@ -37,9 +37,9 @@ the CrateDB adapter/dialect, which is currently available as a patch at `Flink
 JDBC Connector » CrateDB support`_.
 
 The first two jobs, both defined in ``io.crate.flink.demo``, can be launched
-as standalone Java applications, without needing to submit them to a Flink job
-manager. The other job, defined in ``io.crate.streaming``, is meant to be
-submitted as a job to a Flink job manager for demonstration purposes, but can
+as standalone Java applications, without the need to submit them to a Flink
+cluster. The other job, defined in ``io.crate.streaming``, is meant to be
+submitted as a job to a Flink cluster for demonstration purposes, but can
 also be invoked interactively.
 
 - The ``SimpleJdbcSinkJob`` demonstrates a basic example which inserts a few
@@ -89,8 +89,8 @@ Acquire and build the source code.
 =========================
 
 - ``make test`` will probe the job using ``flink info``.
-- ``make submit`` will submit the job using ``flink run`` to a Flink job
-  manager at ``localhost:8081`` .
+- ``make submit`` will submit the job using ``flink run`` to a Flink
+  cluster at ``localhost:8081`` .
 
 ``SimpleJdbcSinkJob`` and ``SimpleTableApiJob``
 ===============================================
@@ -177,7 +177,7 @@ Optional settings
 .. _CrateDB: https://crate.io/
 .. _CrateDB Community Day #2: https://community.crate.io/t/cratedb-community-day-2/1415
 .. _CrateDB JDBC driver: https://crate.io/docs/jdbc/
-.. _executable infrastructure tutorial for Apache Kafka, Apache Flink, and CrateDB: https://github.com/crate/cratedb-examples/tree/main/stacks/kafka-flink#readme
+.. _executable end-to-end tutorial for Apache Kafka, Apache Flink, and CrateDB: https://github.com/crate/cratedb-examples/tree/main/stacks/kafka-flink#readme
 .. _Flink DataStream API: https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/table/data_stream_api/
 .. _Flink » Examples » Batch: https://github.com/apache/flink/tree/master/flink-examples/flink-examples-batch/src/main/java/org/apache/flink/examples/java
 .. _Flink » Examples » DataStream: https://github.com/apache/flink/tree/master/flink-examples/flink-examples-streaming/src/main/java/org/apache/flink/streaming/examples
