@@ -137,8 +137,8 @@ shadowJar {
 assemble.dependsOn(shadowJar)
 
 // Invoke arbitrary classes interactively. Example:
-// ./gradlew runApp -P mainClass=io.crate.flink.demo.SimpleTableApiJob
-task runApp(type:JavaExec) {
+// ./gradlew runJob -P demoJob=io.crate.flink.demo.SimpleTableApiJob
+task runJob(type:JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
-    main = project.hasProperty("mainClass") ? project.getProperty("mainClass") : "package.MyDefaultMain"
+    main = project.hasProperty("demoJob") ? project.getProperty("demoJob") : null
 }
