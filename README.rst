@@ -2,25 +2,38 @@
 Example Flink jobs for "Apache Kafka, Apache Flink, and CrateDB" tutorial
 #########################################################################
 
-*Building industrial IoT applications with open-source components.*
-
 
 *****
 About
 *****
 
-This repository accompanies the article `Build a data ingestion pipeline using
-Kafka, Flink, and CrateDB`_ and material presented at the `CrateDB Community
-Day #2`_.
+Introduction
+============
+
+This repository supports related articles and publications around using `Apache
+Flink`_ and `CrateDB`_, and is part of the *Building industrial IoT applications
+with open-source components* and *CrateDB reference architecture* series.
 
 It is supplemented by a corresponding `executable end-to-end tutorial for
-Apache Kafka, Apache Flink, and CrateDB`_, which makes it easy to run a
-Kafka/Flink infrastructure on your workstation, pulls the Flink job JAR file
-from the assets on the `release page`_ and submits it to the Flink cluster.
+Apache Kafka, Apache Flink, and CrateDB`_, which easily provides a Kafka/Flink
+infrastructure on your workstation based on `Docker Compose`_, pulls the Flink
+job JAR file from the assets on the `release page`_, and submits it to the
+Flink cluster.
+
+Resources
+=========
+
+- Article: `Build a data ingestion pipeline using Kafka, Flink, and CrateDB`_
+- Forum: `CrateDB Community Day #2`_
+- Recording: `An introduction to Apache Flink and Flink SQL`_ by Timo Walther,
+  Principal Software Engineer at Apache Flink
+- Recording: `Live demo of Apache Flink with CrateDB as source or sink`_ by Marios
+  Trivyzas, Senior Software Engineer at CrateDB
 
 For learning more details about the technologies used here, please follow up
 reading the excellent documentation and resources around Apache Flink.
 
+- `Apache Flink Studies`_
 - `Apache Flink SQL Cookbook`_
 - `Flink » Examples » Batch`_
 - `Flink » Examples » DataStream`_
@@ -170,13 +183,16 @@ Optional settings
       - CrateDB user password.
 
 
+.. _An introduction to Apache Flink and Flink SQL: https://www.youtube.com/watch?v=R4UxMdrR5os&t=2208s
 .. _Apache Flink: https://flink.apache.org/
 .. _Apache Flink SQL Cookbook: https://github.com/ververica/flink-sql-cookbook
+.. _Apache Flink Studies: https://jbcodeforce.github.io/flink-studies/
 .. _Apache Kafka: https://kafka.apache.org/
 .. _Build a data ingestion pipeline using Kafka, Flink, and CrateDB: https://dev.to/crate/build-a-data-ingestion-pipeline-using-kafka-flink-and-cratedb-1h5o
 .. _CrateDB: https://crate.io/
 .. _CrateDB Community Day #2: https://community.crate.io/t/cratedb-community-day-2/1415
 .. _CrateDB JDBC driver: https://crate.io/docs/jdbc/
+.. _Docker Compose: https://docs.docker.com/compose/
 .. _executable end-to-end tutorial for Apache Kafka, Apache Flink, and CrateDB: https://github.com/crate/cratedb-examples/tree/main/stacks/kafka-flink#readme
 .. _Flink DataStream API: https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/table/data_stream_api/
 .. _Flink » Examples » Batch: https://github.com/apache/flink/tree/master/flink-examples/flink-examples-batch/src/main/java/org/apache/flink/examples/java
@@ -185,6 +201,7 @@ Optional settings
 .. _Flink JDBC Connector: https://nightlies.apache.org/flink/flink-docs-stable/docs/connectors/table/jdbc/
 .. _Flink JDBC Connector » CrateDB support: https://github.com/apache/flink-connector-jdbc/pull/29
 .. _Flink Table API: https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/table/overview/
+.. _Live demo of Apache Flink with CrateDB as source or sink: https://www.youtube.com/watch?v=R4UxMdrR5os&t=3141s
 .. _NYC Yellow Taxi Trips: https://data.cityofnewyork.us/Transportation/2017-Yellow-Taxi-Trip-Data/biws-g3hs/
 .. _PostgreSQL JDBC Driver: https://github.com/pgjdbc/pgjdbc
 .. _release page: https://github.com/crate/cratedb-flink-jobs/releases
