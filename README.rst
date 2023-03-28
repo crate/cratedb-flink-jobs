@@ -26,20 +26,42 @@ It uses the `Apache Flink JDBC Connector`_, and currently bundles the patch
 submitted at `Apache Flink JDBC Connector » CrateDB support`_.
 
 
+Usage
+=====
 
-Build Flink Job
-===============
+Kafka->CrateDB job
+------------------
+
+Build job Jar file.
 
 .. code:: console
 
     $ ./gradlew build
 
-Submit Flink Job
-================
+Submit to Flink.
 
 .. code:: console
 
-    make run
+    make submit
+
+In-process jobs
+---------------
+
+At ``io.crate.flink.demo``, there are two Flink example jobs/programs which can
+be launched interactively without needing to submit them. ``SimpleJdbcSinkJob``
+demonstrates how to insert records into CrateDB using the official
+``org.postgresql.Driver`` JDBC driver.
+
+.. code:: console
+
+    make run JOB=SimpleJdbcSinkJob
+
+``SimpleTableApiJob`` demonstrates how to leverage the virtual
+``TableEnvironment`` subsystem.
+
+.. code:: console
+
+    make run JOB=SimpleTableApiJob
 
 
 Flink Job Configurations
