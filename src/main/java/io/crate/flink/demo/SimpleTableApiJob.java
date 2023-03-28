@@ -27,7 +27,7 @@ public class SimpleTableApiJob {
      * CREATE TABLE t2(a int) with (refresh_interval=1);
      * CREATE TABLE t3(name string, cnt int) with(refresh_interval=1);
      * CREATE TABLE t4(name string, avg int, min int, max int) with (refresh_interval=1);
-     * INSERT INTO t2(a) SELEC * from generate_series(1, 5, 1);
+     * INSERT INTO t2(a) SELECT * from generate_series(1, 5, 1);
      * INSERT INTO t3(name, cnt) VALUES('Apache', 1), ('Apache', 2), ('Flink', 11), ('Flink', 22), ('Flink', 33), ('CrateDB', 111), ('CrateDB', 333);
      * </pre>
      */
