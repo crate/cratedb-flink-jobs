@@ -14,8 +14,12 @@ group = 'io.crate'
 archivesBaseName = 'cratedb-flink-jobs'
 version = 0.4
 
-tasks.register("printVersion") {
+tasks.register("printProjectVersion") {
     println "ProjectVersion: " + project.version
+}
+
+tasks.register("printFlinkVersion") {
+    println "FlinkVersion: " + flinkVersion
 }
 
 ext {
