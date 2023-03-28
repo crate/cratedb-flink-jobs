@@ -19,11 +19,21 @@ concurrency:
 
 jobs:
   test:
+
     name: Test project
     runs-on: ${{ matrix.os }}
+
     strategy:
       matrix:
         os: [ "ubuntu-latest" ]
+
+    services:
+      cratedb:
+        image: crate/crate:nightly
+        ports:
+          - 4200:4200
+          - 5432:5432
+
     steps:
 
       - name: Acquire sources
@@ -36,5 +46,11 @@ jobs:
           java-version: "11"
           cache: "gradle"
 
-      - name: Build JAR and run "flink info" on it
+      - name: Dry-run "flink info" on TaxiRidesStreamingJob
         run: make test
+
+      - name: Run SimpleJdbcSinkJob
+        run: make run JOB=SimpleJdbcSinkJob
+
+      - name: Run SimpleTableApiJob
+        run: make run JOB=SimpleTableApiJob
