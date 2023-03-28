@@ -43,7 +43,7 @@ EOF
 
 function start() {
   if [ -z "${JOB}" ]; then
-    echo "ERROR: Subcommand missing, use either 'SimpleJdbcSinkJob' or 'SimpleTableApiJob'"
+    echo "ERROR: Job name missing, use either 'SimpleJdbcSinkJob' or 'SimpleTableApiJob'"
     exit 1
   fi
   ${JOB}
