@@ -1,5 +1,8 @@
 test:
 	bin/test.sh
 
-run:
+submit:
 	bin/build-and-submit.sh
+
+run:
+	bin/run.sh $(JOB)
