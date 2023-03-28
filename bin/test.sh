@@ -1,15 +1,14 @@
 #!/bin/bash
 # Print job information.
 
-# Import settings.
+# Import version settings.
 source .env
 
 # Print Gradle and environment versions.
 ./gradlew --version
 
-# Version of the jar file.
-JAR_VERSION=$(./gradlew printVersion | grep "ProjectVersion:" | awk '{print $2}')
-JARFILE="cratedb-flink-jobs-${JAR_VERSION}.jar"
+# Define JAR file name.
+JARFILE="cratedb-flink-jobs-${JOB_VERSION}.jar"
 
 # Build JAR file.
 ./gradlew build
