@@ -1,3 +1,7 @@
+.PHONY: build
+build:
+	./gradlew build
+
 test:
 	bin/test.sh
 

@@ -36,11 +36,11 @@ JDBC Connector`_, using both the vanilla `PostgreSQL JDBC driver`_, and
 the CrateDB adapter/dialect, which is currently available as a patch at `Flink
 JDBC Connector » CrateDB support`_.
 
-The first two jobs, both defined in ``io.crate.flink.demo``, are meant to be
-launched interactively for demonstration purposes, without needing to submit
-them to a job manager. The other job, defined in ``io.crate.streaming``, is
-meant to be submitted as a job to a Flink job manager for demonstration
-purposes, but can also be invoked interactively.
+The first two jobs, both defined in ``io.crate.flink.demo``, can be launched
+as standalone Java applications, without needing to submit them to a Flink job
+manager. The other job, defined in ``io.crate.streaming``, is meant to be
+submitted as a job to a Flink job manager for demonstration purposes, but can
+also be invoked interactively.
 
 - The ``SimpleJdbcSinkJob`` demonstrates a basic example which inserts a few
   records into CrateDB using Flink. It outlines how to use the fundamental
@@ -83,7 +83,7 @@ Acquire and build the source code.
 
     git clone https://github.com/crate/cratedb-flink-jobs
     cd cratedb-flink-jobs
-    ./gradlew build
+    make build
 
 ``TaxiRidesStreamingJob``
 =========================
