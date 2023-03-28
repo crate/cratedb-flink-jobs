@@ -11,7 +11,7 @@ function SimpleJdbcSinkJob() {
   CREATE TABLE my_schema.books(id long, title string, authors string, year int);
 EOF
 
-  ./gradlew runApp -P mainClass=io.crate.flink.demo.SimpleJdbcSinkJob
+  ./gradlew runJob -P demoJob=io.crate.flink.demo.SimpleJdbcSinkJob
   echo
 
   $crash <<EOF
@@ -31,7 +31,7 @@ INSERT INTO t2(a) SELECT * from generate_series(1, 5, 1);
 INSERT INTO t3(name, cnt) VALUES('Apache', 1), ('Apache', 2), ('Flink', 11), ('Flink', 22), ('Flink', 33), ('CrateDB', 111), ('CrateDB', 333);
 EOF
 
-  ./gradlew runApp -P mainClass=io.crate.flink.demo.SimpleTableApiJob
+  ./gradlew runJob -P demoJob=io.crate.flink.demo.SimpleTableApiJob
   echo
 
   $crash <<EOF
