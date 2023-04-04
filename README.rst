@@ -124,8 +124,8 @@ JDBC drivers
   | Driver class: ``org.postgresql.Driver``
   | URL schema: ``postgresql://``
 
-- | ``TaxiRidesStreamingJob`` and ``SimpleTableApiJob`` use the `CrateDB JDBC driver`_
-  | Driver class: ``io.crate.client.jdbc.CrateDriver``
+- | ``TaxiRidesStreamingJob`` and ``SimpleTableApiJob`` use the `PostgreSQL JDBC driver`_ with CrateDB dialect
+  | Driver class: ``org.postgresql.Driver``
   | URL schema: ``crate://``
 
 
@@ -191,7 +191,6 @@ Optional settings
 .. _Build a data ingestion pipeline using Kafka, Flink, and CrateDB: https://dev.to/crate/build-a-data-ingestion-pipeline-using-kafka-flink-and-cratedb-1h5o
 .. _CrateDB: https://crate.io/
 .. _CrateDB Community Day #2: https://community.crate.io/t/cratedb-community-day-2/1415
-.. _CrateDB JDBC driver: https://crate.io/docs/jdbc/
 .. _Docker Compose: https://docs.docker.com/compose/
 .. _executable end-to-end tutorial for Apache Kafka, Apache Flink, and CrateDB: https://github.com/crate/cratedb-examples/tree/main/stacks/kafka-flink#readme
 .. _Flink DataStream API: https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/table/data_stream_api/
