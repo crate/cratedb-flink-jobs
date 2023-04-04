@@ -6,11 +6,15 @@ Changelog
 in progress
 ===========
 
-2023-04-27 0.4
+2023-04-04 0.5
+==============
+- Use vanilla PostgreSQL JDBC driver
+
+2023-03-27 0.4
 ==============
 - Upgrade to use Flink 1.17
 
-2023-04-23 0.3
+2023-03-23 0.3
 ==============
 - Modernize to use Flink 1.16
 
