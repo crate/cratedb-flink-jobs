@@ -23,10 +23,10 @@ tasks.register("printFlinkVersion") {
 }
 
 ext {
-    flinkVersion = '1.17.0'
-    jacksonVersion = '2.14.2'
+    flinkVersion = '1.17.1'
+    jacksonVersion = '2.15.2'
     postgresJDBCVersion = '42.6.0'
-    crateJDBCVersion = '2.6.0'
+    crateJDBCVersion = '2.7.0'
     slf4jVersion = '2.0.7'
     log4jVersion = '2.20.0'
 }
@@ -56,8 +56,8 @@ dependencies {
     flinkShadowJar "org.apache.flink:flink-clients:${flinkVersion}"
     flinkShadowJar "org.apache.flink:flink-table-api-java:${flinkVersion}"
     flinkShadowJar "org.apache.flink:flink-table-api-java-bridge:${flinkVersion}"
-    // Use jitpack.io and Open PR: https://github.com/apache/flink-connector-jdbc/pull/29
-    flinkShadowJar "com.github.apache:flink-connector-jdbc:PR29-SNAPSHOT"
+    // Use jitpack.io and main branch: https://github.com/apache/flink-connector-jdbc
+    flinkShadowJar "com.github.apache:flink-connector-jdbc:main-SNAPSHOT"
 
     // Kafka
     // https://mvnrepository.com/artifact/org.apache.flink
