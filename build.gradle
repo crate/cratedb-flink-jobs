@@ -57,7 +57,7 @@ dependencies {
     flinkShadowJar "org.apache.flink:flink-table-api-java:${flinkVersion}"
     flinkShadowJar "org.apache.flink:flink-table-api-java-bridge:${flinkVersion}"
     // Use jitpack.io and main branch: https://github.com/apache/flink-connector-jdbc
-    flinkShadowJar "com.github.apache:flink-connector-jdbc:main-SNAPSHOT"
+    flinkShadowJar "com.github.apache:flink-connector-jdbc:3.1.1"
 
     // Kafka
     // https://mvnrepository.com/artifact/org.apache.flink
