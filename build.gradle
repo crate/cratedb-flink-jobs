@@ -28,7 +28,7 @@ ext {
     postgresJDBCVersion = '42.6.0'
     crateJDBCVersion = '2.7.0'
     slf4jVersion = '2.0.7'
-    log4jVersion = '2.20.0'
+    log4jVersion = '2.22.1'
 }
 
 java {
