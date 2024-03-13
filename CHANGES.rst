@@ -6,6 +6,10 @@ Changelog
 in progress
 ===========
 
+2024-03-13 0.5
+==============
+- Upgrade to use Flink 1.18
+
 2023-04-27 0.4
 ==============
 - Upgrade to use Flink 1.17
