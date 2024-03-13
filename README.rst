@@ -46,8 +46,7 @@ Details
 
 Most of the Flink jobs demonstrated here connect to CrateDB using the `Flink
 JDBC Connector`_, using both the vanilla `PostgreSQL JDBC driver`_, and
-the CrateDB adapter/dialect, which is currently available as a patch at `Flink
-JDBC Connector » CrateDB support`_.
+the CrateDB adapter/dialect.
 
 The first two jobs, both defined in ``io.crate.flink.demo``, can be launched
 as standalone Java applications, without the need to submit them to a Flink
@@ -199,7 +198,6 @@ Optional settings
 .. _Flink » Examples » DataStream: https://github.com/apache/flink/tree/master/flink-examples/flink-examples-streaming/src/main/java/org/apache/flink/streaming/examples
 .. _Flink » Examples » Table: https://github.com/apache/flink/tree/master/flink-examples/flink-examples-table/src/main/java/org/apache/flink/table/examples/java
 .. _Flink JDBC Connector: https://nightlies.apache.org/flink/flink-docs-stable/docs/connectors/table/jdbc/
-.. _Flink JDBC Connector » CrateDB support: https://github.com/apache/flink-connector-jdbc/pull/29
 .. _Flink Table API: https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/table/overview/
 .. _Live demo of Apache Flink with CrateDB as source or sink: https://www.youtube.com/watch?v=R4UxMdrR5os&t=3141s
 .. _NYC Yellow Taxi Trips: https://data.cityofnewyork.us/Transportation/2017-Yellow-Taxi-Trip-Data/biws-g3hs/
