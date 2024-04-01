@@ -22,7 +22,7 @@ tasks.register("printFlinkVersion") {
 }
 
 ext {
-    flinkVersion = '1.18.1'
+    flinkVersion = '1.19.0'
     flinkJdbcVersion = '3.1.2-1.18'
     flinkKafkaVersion = '3.1.0-1.18'
     jacksonVersion = '2.16.2'
