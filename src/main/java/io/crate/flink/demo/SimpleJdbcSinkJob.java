@@ -29,7 +29,7 @@ public class SimpleJdbcSinkJob {
         // CREATE TABLE my_schema.books(id long, title string, authors string, year int);
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        env.fromElements(
+        env.fromData(
                 new Book(101L, "Stream Processing with Apache Flink", "Fabian Hueske, Vasiliki Kalavri", 2019),
                 new Book(102L, "Streaming Systems", "Tyler Akidau, Slava Chernyak, Reuven Lax", 2018),
                 new Book(103L, "Designing Data-Intensive Applications", "Martin Kleppmann", 2017),

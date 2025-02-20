@@ -44,7 +44,14 @@ public class SimpleTableApiJob {
         String baseUrl         = "jdbc:crate://localhost:5432";
 
         JdbcCatalog catalog = new JdbcCatalog(
-                Thread.currentThread().getContextClassLoader(), CATALOG_NAME, defaultDatabase, username, password, baseUrl);
+                Thread.currentThread().getContextClassLoader(),
+                CATALOG_NAME,
+                defaultDatabase,
+                username,
+                password,
+                baseUrl,
+                null
+                );
         streamTableEnv.registerCatalog(CATALOG_NAME, catalog);
         batchTableEnv.registerCatalog(CATALOG_NAME, catalog);
 
