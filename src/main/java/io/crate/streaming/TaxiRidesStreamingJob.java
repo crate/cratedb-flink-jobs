@@ -2,13 +2,14 @@ package io.crate.streaming;
 
 import io.crate.streaming.model.TaxiRide;
 import io.crate.streaming.model.TaxiRideDeserializationSchema;
+import org.apache.flink.api.common.eventtime.WatermarkStrategy;
+import org.apache.flink.api.connector.source.Source;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.connector.jdbc.JdbcConnectionOptions;
 import org.apache.flink.connector.jdbc.JdbcExecutionOptions;
 import org.apache.flink.connector.jdbc.JdbcSink;
+import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.source.SourceFunction;
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 
 import java.util.Properties;
 
@@ -23,7 +24,7 @@ public class TaxiRidesStreamingJob {
         ParameterTool parameters = ParameterTool.fromArgs(args);
 
         env
-                .addSource(createStreamSource(parameters))
+                .fromSource(createStreamSource(parameters), WatermarkStrategy.noWatermarks(), "kafa")
                 .map(new TaxiRideToRowStringFunction())
                 .addSink(
                     JdbcSink.sink(
@@ -45,7 +46,7 @@ public class TaxiRidesStreamingJob {
         env.execute();
     }
 
-    private static SourceFunction<TaxiRide> createStreamSource(ParameterTool parameters) {
+    private static Source<TaxiRide, ?, ?> createStreamSource(ParameterTool parameters) {
         Properties properties = new Properties();
         properties.setProperty(
                 BOOTSTRAP_SERVERS_CONFIG,
@@ -58,10 +59,10 @@ public class TaxiRidesStreamingJob {
                 parameters.get("kafka.offset", "earliest")
         );
 
-        return new FlinkKafkaConsumer<>(
-                parameters.getRequired("kafka.topic"),
-                TaxiRideDeserializationSchema.INSTANCE,
-                properties
-        );
+        return KafkaSource.<TaxiRide>builder()
+                .setTopics("kafka.topic")
+                .setDeserializer(TaxiRideDeserializationSchema.INSTANCE)
+                .setProperties(properties)
+                .build();
     }
 }
