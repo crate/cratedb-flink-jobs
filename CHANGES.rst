@@ -6,6 +6,12 @@ Changelog
 in progress
 ===========
 
+2025-03-22 0.6
+==============
+- Upgrade to latest flink (1.20.1)
+- Updated org.postgresql:postgresql from 42.7.2 to 42.7.3
+- Updated com.fasterxml.jackson.datatype:jackson-datatype-jsr310
+
 2024-03-13 0.5
 ==============
 - Upgrade to use Flink 1.18
