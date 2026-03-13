@@ -23,7 +23,7 @@ tasks.register("printFlinkVersion") {
 
 ext {
     flinkVersion = '1.20.1'
-    flinkJdbcVersion = '3.2.0-1.19'
+    flinkJdbcVersion = '3.3.0-1.20'
     flinkKafkaVersion = '3.4.0-1.20'
     jacksonVersion = '2.18.3'
     postgresJDBCVersion = '42.7.8'
