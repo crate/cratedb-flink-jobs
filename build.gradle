@@ -26,7 +26,7 @@ ext {
     flinkJdbcVersion = '3.3.0-1.20'
     flinkKafkaVersion = '4.0.1-2.0'
     jacksonVersion = '2.21.1'
-    postgresJDBCVersion = '42.7.8'
+    postgresJDBCVersion = '42.7.10'
     crateJDBCVersion = '2.7.0'
     slf4jVersion = '2.0.12'
     log4jVersion = '2.24.3'
