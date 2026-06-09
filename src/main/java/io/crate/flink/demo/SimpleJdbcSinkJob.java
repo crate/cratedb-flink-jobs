@@ -2,7 +2,7 @@ package io.crate.flink.demo;
 
 import org.apache.flink.connector.jdbc.JdbcConnectionOptions;
 import org.apache.flink.connector.jdbc.JdbcExecutionOptions;
-import org.apache.flink.connector.jdbc.JdbcSink;
+import org.apache.flink.connector.jdbc.core.datastream.sink.JdbcSink;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
 public class SimpleJdbcSinkJob {
@@ -34,27 +34,27 @@ public class SimpleJdbcSinkJob {
                 new Book(102L, "Streaming Systems", "Tyler Akidau, Slava Chernyak, Reuven Lax", 2018),
                 new Book(103L, "Designing Data-Intensive Applications", "Martin Kleppmann", 2017),
                 new Book(104L, "Kafka: The Definitive Guide", "Gwen Shapira, Neha Narkhede, Todd Palino", 2017)
-        ).addSink(
-                JdbcSink.sink(
-                        "insert into my_schema.books (id, title, authors, year) values (?, ?, ?, ?)",
-                        (statement, book) -> {
-                            statement.setLong(1, book.id);
-                            statement.setString(2, book.title);
-                            statement.setString(3, book.authors);
-                            statement.setInt(4, book.year);
-                        },
-                        JdbcExecutionOptions.builder()
+        ).sinkTo(
+                JdbcSink.<Book>builder()
+                        .withQueryStatement(
+                                "insert into my_schema.books (id, title, authors, year) values (?, ?, ?, ?)",
+                                (statement, book) -> {
+                                    statement.setLong(1, book.id);
+                                    statement.setString(2, book.title);
+                                    statement.setString(3, book.authors);
+                                    statement.setInt(4, book.year);
+                                })
+                        .withExecutionOptions(JdbcExecutionOptions.builder()
                                 .withBatchSize(1000)
                                 .withBatchIntervalMs(200)
                                 .withMaxRetries(5)
-                                .build(),
-                        new JdbcConnectionOptions.JdbcConnectionOptionsBuilder()
+                                .build())
+                        .buildAtLeastOnce(new JdbcConnectionOptions.JdbcConnectionOptionsBuilder()
                                 .withUrl("jdbc:postgresql://localhost:5432/crate")
                                 .withDriverName("org.postgresql.Driver")
                                 .withUsername("crate")
                                 .withPassword("crate")
-                                .build()
-                ));
+                                .build()));
         env.execute();
     }
 }

@@ -2,7 +2,7 @@ package io.crate.flink.demo;
 
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.connector.jdbc.catalog.JdbcCatalog;
+import org.apache.flink.connector.jdbc.cratedb.database.catalog.CrateDBCatalog;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.Table;
@@ -43,14 +43,13 @@ public class SimpleTableApiJob {
         String password        = "crate";
         String baseUrl         = "jdbc:crate://localhost:5432";
 
-        JdbcCatalog catalog = new JdbcCatalog(
+        CrateDBCatalog catalog = new CrateDBCatalog(
                 Thread.currentThread().getContextClassLoader(),
                 CATALOG_NAME,
                 defaultDatabase,
                 username,
                 password,
-                baseUrl,
-                null
+                baseUrl
                 );
         streamTableEnv.registerCatalog(CATALOG_NAME, catalog);
         batchTableEnv.registerCatalog(CATALOG_NAME, catalog);

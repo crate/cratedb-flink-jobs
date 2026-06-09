@@ -6,6 +6,12 @@ Changelog
 in progress
 ===========
 
+2026-06-09 0.8
+==============
+- Upgrade to Flink 2.0.2 (with Java 17)
+- Migrate the JDBC connector to the Flink 2.0 split artifacts ``flink-connector-jdbc-{core,postgres,cratedb}:4.0.0-2.0`` (the monolithic ``flink-connector-jdbc`` was retired at 3.3.0-1.20)
+
+
 2026-06-09 0.7
 ==============
 - Fix TaxiRidesStreamingJob Kafka source subscribing to the literal topic name
