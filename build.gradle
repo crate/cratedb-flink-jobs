@@ -22,9 +22,9 @@ tasks.register("printFlinkVersion") {
 }
 
 ext {
-    flinkVersion = '1.20.1'
-    flinkJdbcVersion = '3.3.0-1.20'
-    flinkKafkaVersion = '3.4.0-1.20'
+    flinkVersion = '2.0.2'
+    jdbcConnectorVersion = '4.0.0-2.0'
+    flinkKafkaVersion = '4.0.1-2.0'
     jacksonVersion = '2.21.1'
     postgresJDBCVersion = '42.7.8'
     crateJDBCVersion = '2.7.0'
@@ -34,7 +34,7 @@ ext {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(11)
+        languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
@@ -49,6 +49,10 @@ configurations {
     flinkShadowJar.exclude group: 'com.google.code.findbugs', module: 'jsr305'
     flinkShadowJar.exclude group: 'org.slf4j'
     flinkShadowJar.exclude group: 'org.apache.logging.log4j'
+    // Flink 2.0's runtime ships the at.yawk.lz4 fork of lz4-java, which conflicts (same Gradle
+    // capability) with the org.lz4:lz4-java that kafka-clients pulls in. The fork keeps the same
+    // net.jpountz.lz4 classes, so drop the org.lz4 one and let Flink's fork satisfy both.
+    flinkShadowJar.exclude group: 'org.lz4', module: 'lz4-java'
 }
 
 dependencies {
@@ -57,7 +61,8 @@ dependencies {
     flinkShadowJar "org.apache.flink:flink-clients:${flinkVersion}"
     flinkShadowJar "org.apache.flink:flink-table-api-java:${flinkVersion}"
     flinkShadowJar "org.apache.flink:flink-table-api-java-bridge:${flinkVersion}"
-    flinkShadowJar "org.apache.flink:flink-connector-jdbc:${flinkJdbcVersion}"
+    flinkShadowJar "org.apache.flink:flink-connector-jdbc-core:${jdbcConnectorVersion}"
+    flinkShadowJar "org.apache.flink:flink-connector-jdbc-cratedb:${jdbcConnectorVersion}"
 
     // Kafka
     // https://mvnrepository.com/artifact/org.apache.flink
