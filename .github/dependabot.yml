@@ -9,6 +9,14 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "monthly"
+    ignore:
+      # The Flink connectors are versioned `<connector>-<flinkline>` (e.g. 3.4.0-1.20).
+      # A major bump crosses to a new Flink line (e.g. 4.x targets Flink 2.0) and must
+      # stay aligned with `flinkVersion` in build.gradle, so require manual review for it.
+      - dependency-name: "org.apache.flink:flink-connector-kafka"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "org.apache.flink:flink-connector-jdbc"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: "github-actions"
     # Workflow files stored in the default location of `.github/workflows`

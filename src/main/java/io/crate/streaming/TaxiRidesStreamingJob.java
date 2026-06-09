@@ -24,7 +24,7 @@ public class TaxiRidesStreamingJob {
         ParameterTool parameters = ParameterTool.fromArgs(args);
 
         env
-                .fromSource(createStreamSource(parameters), WatermarkStrategy.noWatermarks(), "kafa")
+                .fromSource(createStreamSource(parameters), WatermarkStrategy.noWatermarks(), "kafka")
                 .map(new TaxiRideToRowStringFunction())
                 .addSink(
                     JdbcSink.sink(
@@ -60,7 +60,7 @@ public class TaxiRidesStreamingJob {
         );
 
         return KafkaSource.<TaxiRide>builder()
-                .setTopics("kafka.topic")
+                .setTopics(parameters.getRequired("kafka.topic"))
                 .setDeserializer(TaxiRideDeserializationSchema.INSTANCE)
                 .setProperties(properties)
                 .build();

@@ -6,6 +6,14 @@ Changelog
 in progress
 ===========
 
+2026-06-09 0.7
+==============
+- Fix TaxiRidesStreamingJob Kafka source subscribing to the literal topic name
+  "kafka.topic" instead of the value of the ``--kafka.topic`` parameter; regressed
+  during the Flink 1.20 KafkaSource migration
+- Pin flink-connector-kafka to the Flink 1.20 line (3.4.0-1.20); the previous
+  4.0.1-2.0 targets Flink 2.0 and is incompatible with the 1.20.1 runtime
+
 2025-03-22 0.6
 ==============
 - Upgrade to latest flink (1.20.1)
